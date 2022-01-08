@@ -1,3 +1,7 @@
+/*
+ *	Defines some macros that provide verbose error reporting to the standard output stream.
+ */
+
 #ifndef KERROR_H
 #define KERROR_H
 

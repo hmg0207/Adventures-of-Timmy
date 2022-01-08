@@ -21,7 +21,7 @@ WFLAGS		:= -g -Wall -Wextra
 STDFLAGS	:= -std=c++17
 
 # Setup Linker Flags
-LDFLAGS		:= -lSDL2 -ldl -lm -lstdc++
+LDFLAGS		:= -lSDL2 -lGL -lGLEW -ldl -lm -lstdc++
 
 $(TARGET) : $(OBJS)
 	$(CC) $(OBJS) $(WFLAGS) -$(STDFLAGS) -o $@ $(LDFLAGS)

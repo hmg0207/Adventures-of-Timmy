@@ -21,10 +21,13 @@ private:
     void init();
     void handle_input();
     void loop();
+    void draw() const;
 
 
 private:
     SDL_Window* window;
+    SDL_GLContext gfx_ctx;
+
     int win_width;
     int win_height;
 
