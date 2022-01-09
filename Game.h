@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 
+#include "Sprite.h"
+#include "Shader.h"
+
 enum class GameState { PLAY , EXIT };
 
 class Game
@@ -18,10 +21,11 @@ public:
     void run();
 
 private:
-    void init();
+    void init_systems();
+    void init_shaders();
     void handle_input();
     void loop();
-    void draw() const;
+    void draw();
 
 
 private:
@@ -32,6 +36,10 @@ private:
     int win_height;
 
     GameState state;
+
+    Sprite test_sprite;
+
+    Shader test_shader;
 
 };
 
