@@ -13,14 +13,15 @@ public:
     ~Shader();
 
 public:
-    void compile_shaders( const std::string& vs_file, const std::string& fs_file );
-    void link_shaders();
-    void bind_attribute( const std::string& attrib );
-    void start();
-    void stop();
+    GLvoid compile_shaders( const std::string& vs_file, const std::string& fs_file );
+    GLvoid bind_attribute( const std::string& attrib );    
+    GLvoid start() const noexcept;
+    GLvoid stop() const noexcept;
+
+    GLuint get_uniform_id( const std::string& name ) const;
 
 private:
-    GLuint load_shader( const std::string& filename, const unsigned type );
+    GLuint load_shader( const std::string& filename, const unsigned type ) const;
 
 private:
     GLuint prog_id;

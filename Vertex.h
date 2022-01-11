@@ -3,21 +3,24 @@
 
 #include <GL/glew.h>
 
+struct Position
+{
+    GLfloat x;
+    GLfloat y;
+};
+
+struct Colour
+{
+    GLubyte r;
+    GLubyte g;
+    GLubyte b;
+    GLubyte a;
+};    
+
 struct Vertex
 {
-    struct Position
-    {
-        GLfloat x;
-        GLfloat y;
-    } position;
-
-    struct Colour
-    {
-        GLubyte r;
-        GLubyte g;
-        GLubyte b;
-        GLubyte a;
-    } colour;
+    Position position;
+    Colour   colour;
 };
 
 

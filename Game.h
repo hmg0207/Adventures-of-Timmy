@@ -41,6 +41,8 @@ private:
 
     Shader test_shader;
 
+    float timer;
+
 };
 
 

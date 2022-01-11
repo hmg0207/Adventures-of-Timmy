@@ -4,15 +4,15 @@
 
 
 Game::Game()
-{
-    this->window = nullptr;
-    this->gfx_ctx = nullptr;
+    :
+    window( nullptr ),
+    gfx_ctx( nullptr ),
+    win_width( 1024 ),
+    win_height( 768 ),
+    state( GameState::PLAY ),
+    timer( 0.0f )
+{}
 
-    this->win_width = 1024;
-    this->win_height = 768;
-
-    this->state = GameState::PLAY;
-}
 
 Game::~Game()
 {
@@ -54,7 +54,7 @@ void Game::run()
 {
     this->init_systems();
     this->init_shaders();
-    this->test_sprite.init( -1, -1, 1, 1 );
+    this->test_sprite.init( -1, -1, 2, 2 );
     this->loop();
 }
 
@@ -63,6 +63,7 @@ void Game::loop()
     while ( this->state != GameState::EXIT )
     {
         this->handle_input();
+        this->timer += 0.01f;
         this->draw();
     }
     
@@ -81,7 +82,7 @@ void Game::handle_input()
                 break;
 
             case SDL_MOUSEMOTION:
-                printf( "Mouse Pos: %d, %d\n ", ev.motion.x, ev.motion.y );
+                //printf( "Mouse Pos: %d, %d\n ", ev.motion.x, ev.motion.y );
                 break;
         };
     }
@@ -96,6 +97,9 @@ void Game::draw()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     this->test_shader.start();
+    GLuint timer_loc = this->test_shader.get_uniform_id( "timer" );
+    glUniform1f( timer_loc, this->timer );
+
     this->test_sprite.draw();
     this->test_shader.stop();
 

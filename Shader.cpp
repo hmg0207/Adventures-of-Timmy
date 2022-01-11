@@ -20,7 +20,7 @@ Shader::~Shader()
 
 }
 
-void Shader::compile_shaders( const std::string& vs_file, const std::string& fs_file )
+GLvoid Shader::compile_shaders( const std::string& vs_file, const std::string& fs_file )
 {
     this->vs_id    = this->load_shader( vs_file, GL_VERTEX_SHADER );
     this->fs_id    = this->load_shader( fs_file, GL_FRAGMENT_SHADER );
@@ -56,12 +56,7 @@ void Shader::compile_shaders( const std::string& vs_file, const std::string& fs_
 
 }
 
-void Shader::link_shaders()
-{
-
-}
-
-GLuint Shader::load_shader( const std::string& filename, const unsigned type )
+GLuint Shader::load_shader( const std::string& filename, const unsigned type ) const
 {
     std::string code;
     std::ifstream ifs;
@@ -108,13 +103,13 @@ GLuint Shader::load_shader( const std::string& filename, const unsigned type )
     return id;
 }
 
-void Shader::bind_attribute( const std::string& attrib )
+GLvoid Shader::bind_attribute( const std::string& attrib )
 {
     glBindAttribLocation( this->prog_id, this->num_attribs, attrib.c_str() );
     this->num_attribs++;
 }
 
-void Shader::start()
+GLvoid Shader::start() const noexcept
 {
     glUseProgram( this->prog_id );
     for ( GLuint i = 0U; i < this->num_attribs; i++ )
@@ -123,11 +118,21 @@ void Shader::start()
     }
 }
 
-void Shader::stop()
+GLvoid Shader::stop() const noexcept
 {
     glUseProgram( 0U );
     for ( GLuint i = 0U; i < this->num_attribs; i++ )
     {
         glDisableVertexAttribArray(i);
     }    
+}
+
+GLuint Shader::get_uniform_id( const std::string& name ) const
+{
+    GLuint id = glGetUniformLocation( this->prog_id, name.c_str() );
+    if ( id == GL_INVALID_INDEX )
+    {
+        KERROR( "Uniform \"%s\" not found in shader.", name.c_str() );
+    }
+    return id;
 }
