@@ -29,6 +29,9 @@ void Shader::compile_shaders( const std::string& vs_file, const std::string& fs_
     glAttachShader( this->prog_id, this->vs_id );
     glAttachShader( this->prog_id, this->fs_id );
 
+    this->bind_attribute( "vPos" );
+    this->bind_attribute( "vCol" );    
+
     int success    = -1; 
     glLinkProgram(  this->prog_id) ;
     glGetProgramiv( this->prog_id, GL_LINK_STATUS, &success );
@@ -44,8 +47,6 @@ void Shader::compile_shaders( const std::string& vs_file, const std::string& fs_
 
         KERROR( "Program failed to link.\n\t%s", log );
     }
-
-    this->bind_attribute( "vPos" );
 
     glDetachShader( this->prog_id, this->vs_id );
     glDetachShader( this->prog_id, this->fs_id );

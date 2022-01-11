@@ -1,7 +1,13 @@
 #include "Sprite.h"
+#include "Vertex.h"
+
+#include <cstddef>
+
 
 Sprite::Sprite()
-{
+    :
+    vbo(0U)
+{   
 }
 
 Sprite::~Sprite()
@@ -24,20 +30,37 @@ void Sprite::init( const int xi, const int yi, const int wi, const int hi )
         glGenBuffers( 1, &this->vbo );
     }
     
-    // Two Triangles with 3 points, each point has 2 vertices = 2 * 3 * 2 = 12 in total.    
-    GLfloat vertex_data[ 2 * 3 * 2 ] =
-    {
-        this->x + this->width, this->y + this->height,  // T1 TR
-        this->x,               this->y + this->height,  // T1 TL
-        this->x,               this->y,                 // T1 BL
+    // Two Triangles with 3 points. Do Index Buffers later...
+    Vertex vd[ 6 ];
+    vd[0].position.x = this->x + this->width;  vd[0].position.y = this->y + this->height;
+    vd[1].position.x = this->x;                vd[1].position.y = this->y + this->height;
+    vd[2].position.x = this->x;                vd[2].position.y = this->y;
 
-        this->x,               this->y,                 // T2 BL
-        this->x + this->width, this->y,                 // T2 BR
-        this->x + this->width, this->y + this->height   // T2 TR
-    };
+    vd[3].position.x = this->x;                vd[3].position.y = this->y;
+    vd[4].position.x = this->x + this->width;  vd[4].position.y = this->y;
+    vd[5].position.x = this->x + this->width;  vd[5].position.y = this->y + this->height;
+
+    for ( GLuint i = 0U; i < 6U; i++ )
+    {
+        vd[i].colour.r = 255U;
+        vd[i].colour.g =   0U;
+        vd[i].colour.b = 255U;
+        vd[i].colour.a = 255U;
+    }
+
+    vd[1].colour.r = 255U;
+    vd[1].colour.g =   0U;
+    vd[1].colour.b =   0U;
+    vd[1].colour.a = 255U;
+
+    vd[4].colour.r =   0U;
+    vd[4].colour.g = 255U;
+    vd[4].colour.b =   0U;
+    vd[4].colour.a = 255U;        
+
 
     glBindBuffer( GL_ARRAY_BUFFER, this->vbo );
-    glBufferData( GL_ARRAY_BUFFER, sizeof(vertex_data), vertex_data, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(vd), vd, GL_STATIC_DRAW );
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
 }
@@ -47,7 +70,8 @@ void Sprite::draw() const
     glBindBuffer( GL_ARRAY_BUFFER, this->vbo );
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer( 0U, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+    glVertexAttribPointer( 0U, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof( Vertex, position ) );
+    glVertexAttribPointer( 1U, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void *)offsetof( Vertex, colour ) );
 
     glDrawArrays( GL_TRIANGLES, 0, 6 );
 
