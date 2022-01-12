@@ -15,12 +15,23 @@ struct Colour
     GLubyte g;
     GLubyte b;
     GLubyte a;
-};    
+};
+
+struct UV
+{
+    GLfloat u;
+    GLfloat v;
+};
 
 struct Vertex
 {
     Position position;
     Colour   colour;
+    UV       uv;
+
+    void set_position( const GLfloat x, const GLfloat y );
+    void set_colour( const GLubyte r, const GLubyte g, const GLubyte b, const GLubyte a );
+    void set_uv( const GLfloat u, const GLfloat v );
 };
 
 

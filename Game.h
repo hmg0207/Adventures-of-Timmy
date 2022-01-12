@@ -6,6 +6,7 @@
 
 #include "Sprite.h"
 #include "Shader.h"
+#include "Texture.h"
 
 enum class GameState { PLAY , EXIT };
 
@@ -40,8 +41,9 @@ private:
     Sprite test_sprite;
 
     Shader test_shader;
+    Texture test_texture;  // Just for testing. This will be embedded with Sprite later on
 
-    float timer;
+    float timer;    
 
 };
 

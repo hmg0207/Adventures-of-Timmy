@@ -2,6 +2,7 @@
 
 #include "Kerror.h"
 
+#include "Image_Loader.h"
 
 Game::Game()
     :
@@ -53,8 +54,9 @@ void Game::init_shaders()
 void Game::run()
 {
     this->init_systems();
-    this->init_shaders();
+    this->init_shaders();    
     this->test_sprite.init( -1, -1, 2, 2 );
+    this->test_texture = Image_Loader::load_png( "./Dev_Res/Images/happy-test-screen.png" );
     this->loop();
 }
 
@@ -97,11 +99,28 @@ void Game::draw()
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     this->test_shader.start();
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, this->test_texture.id );
     GLuint timer_loc = this->test_shader.get_uniform_id( "timer" );
+    if ( timer_loc == GL_INVALID_INDEX )
+    {
+        KERROR( "Failed to get uniform id." );
+    }
     glUniform1f( timer_loc, this->timer );
+
+    GLuint tex_loc = this->test_shader.get_uniform_id( "tex" );
+    if ( tex_loc == GL_INVALID_INDEX )
+    {
+        KERROR( "Failed to get uniform id." );
+    }
+    glUniform1i( tex_loc, 0 );
+    
+    
 
     this->test_sprite.draw();
     this->test_shader.stop();
+
+    glBindTexture( GL_TEXTURE_2D, 0U );
 
     SDL_GL_SwapWindow( this->window );
 }

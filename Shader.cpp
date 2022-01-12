@@ -29,8 +29,9 @@ GLvoid Shader::compile_shaders( const std::string& vs_file, const std::string& f
     glAttachShader( this->prog_id, this->vs_id );
     glAttachShader( this->prog_id, this->fs_id );
 
-    this->bind_attribute( "vPos" );
-    this->bind_attribute( "vCol" );    
+    this->bind_attribute( "v_pos" );
+    this->bind_attribute( "v_col" );
+    this->bind_attribute( "v_uv" );
 
     int success    = -1; 
     glLinkProgram(  this->prog_id) ;
@@ -127,12 +128,12 @@ GLvoid Shader::stop() const noexcept
     }    
 }
 
-GLuint Shader::get_uniform_id( const std::string& name ) const
+GLint Shader::get_uniform_id( const std::string& name ) const
 {
-    GLuint id = glGetUniformLocation( this->prog_id, name.c_str() );
+    GLint id = glGetUniformLocation( this->prog_id, name.c_str() );
     if ( id == GL_INVALID_INDEX )
     {
-        KERROR( "Uniform \"%s\" not found in shader.", name.c_str() );
+        KWARNING( "Uniform \"%s\" not found in shader.", name.c_str() );        
     }
     return id;
 }

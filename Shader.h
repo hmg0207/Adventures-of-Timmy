@@ -18,7 +18,7 @@ public:
     GLvoid start() const noexcept;
     GLvoid stop() const noexcept;
 
-    GLuint get_uniform_id( const std::string& name ) const;
+    GLint get_uniform_id( const std::string& name ) const;
 
 private:
     GLuint load_shader( const std::string& filename, const unsigned type ) const;
