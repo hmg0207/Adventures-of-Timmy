@@ -1,6 +1,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include <vector>
+
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 
@@ -38,10 +40,10 @@ private:
 
     GameState state;
 
-    Sprite test_sprite;
-
+    std::vector<Sprite*> sprites;
+    
     Shader test_shader;
-    Texture test_texture;  // Just for testing. This will be embedded with Sprite later on
+    
 
     float timer;    
 

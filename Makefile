@@ -38,6 +38,7 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 
 clean:
 	$(RM) -r $(TARGET)
+	$(RM) .objs/*
 
 -include $(DEPS)
 

@@ -2,8 +2,6 @@
 
 #include "Kerror.h"
 
-#include "Image_Loader.h"
-
 Game::Game()
     :
     window( nullptr ),
@@ -17,6 +15,11 @@ Game::Game()
 
 Game::~Game()
 {
+    for( auto& i : this->sprites )
+    {
+        delete i;
+        this->sprites.pop_back();
+    }
     SDL_GL_DeleteContext( this->gfx_ctx );
 }
 
@@ -55,8 +58,16 @@ void Game::run()
 {
     this->init_systems();
     this->init_shaders();    
-    this->test_sprite.init( -1, -1, 2, 2 );
-    this->test_texture = Image_Loader::load_png( "./Dev_Res/Images/happy-test-screen.png" );
+
+    this->sprites.push_back( new Sprite() );
+    this->sprites.back()->init( -1, -1, 1, 1, "./Dev_Res/Images/happy-test-screen.png" );
+
+    this->sprites.push_back( new Sprite() );
+    this->sprites.back()->init( 0, -1, 1, 1, "./Dev_Res/Images/happy-test-screen.png" );
+
+    this->sprites.push_back( new Sprite() );
+    this->sprites.back()->init( -1, 0, 1, 1, "./Dev_Res/Images/happy-test-screen.png" );
+
     this->loop();
 }
 
@@ -100,7 +111,7 @@ void Game::draw()
 
     this->test_shader.start();
     glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, this->test_texture.id );
+    
     GLuint timer_loc = this->test_shader.get_uniform_id( "timer" );
     if ( timer_loc == GL_INVALID_INDEX )
     {
@@ -116,8 +127,11 @@ void Game::draw()
     glUniform1i( tex_loc, 0 );
     
     
+    for( auto& i : this->sprites )
+    {
+        i->draw();
+    }    
 
-    this->test_sprite.draw();
     this->test_shader.stop();
 
     glBindTexture( GL_TEXTURE_2D, 0U );

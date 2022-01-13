@@ -3,11 +3,14 @@
 
 #include <cstddef>
 
+#include "Resource_Manager.h"
+#include "Kerror.h"
 
 Sprite::Sprite()
     :
     vbo(0U)
-{   
+{
+    KNOTICE( "Sprite Created." );
 }
 
 Sprite::~Sprite()
@@ -16,14 +19,16 @@ Sprite::~Sprite()
     {
         glDeleteBuffers( 1, &this->vbo );
     }
+    KNOTICE( "Sprite Destroyed." );
 }
 
-void Sprite::init( const int xi, const int yi, const int wi, const int hi )
+void Sprite::init( const int xi, const int yi, const int wi, const int hi, const std::string tex_path )
 {
     this->x      = xi;
     this->y      = yi;
     this->width  = wi;
     this->height = hi;
+    this->texture = Resource_Manager::get_texture( tex_path );
 
     if ( this->vbo == 0U )
     {
@@ -66,6 +71,8 @@ void Sprite::init( const int xi, const int yi, const int wi, const int hi )
 
 void Sprite::draw() const
 {
+    glBindTexture( GL_TEXTURE_2D, this->texture.id );
+    
     glBindBuffer( GL_ARRAY_BUFFER, this->vbo );
     glEnableVertexAttribArray(0);
 
