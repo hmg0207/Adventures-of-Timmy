@@ -9,6 +9,7 @@
 #include "Sprite.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Camera_2D.h"
 
 enum class GameState { PLAY , EXIT };
 
@@ -23,12 +24,13 @@ public:
 public:
     void run();
 
-private:
+private: 
     void init_systems();
     void init_shaders();
     void handle_input();
     void loop();
     void draw();
+    void calculate_fps();
 
 
 private:
@@ -39,13 +41,17 @@ private:
     int win_height;
 
     GameState state;
+    Camera_2D camera;
 
     std::vector<Sprite*> sprites;
     
     Shader test_shader;
-    
 
-    float timer;    
+    float max_fps;
+    float fps;
+    float frame_time;    
+
+    float timer;
 
 };
 
