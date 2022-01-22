@@ -1,5 +1,6 @@
 #include "Game.h"
 
+#include "Resource_Manager.h"
 #include "Kerror.h"
 
 Game::Game()
@@ -18,14 +19,6 @@ Game::Game()
 
 Game::~Game()
 {
-    for( auto& i : this->sprites )
-    {
-        if ( i != nullptr )
-        {
-            delete i;
-        }
-        this->sprites.pop_back();
-    }
     SDL_GL_DeleteContext( this->gfx_ctx );
 }
 
@@ -82,13 +75,9 @@ void Game::init_shaders()
 void Game::run()
 {
     this->init_systems();
-    this->init_shaders();    
+    this->init_shaders();
+    this->sprite_batch.init(); 
 
-    this->sprites.push_back( new Sprite() );
-    this->sprites.back()->init( 0, 0, this->win_width/2, this->win_width/2, "./Dev_Res/Images/happy-test-screen.png" );
-
-    this->sprites.push_back( new Sprite() );
-    this->sprites.back()->init( this->win_width/2, 0, this->win_width/2, this->win_width/2, "./Dev_Res/Images/happy-test-screen.png" );
 
     this->loop();
 }
@@ -158,11 +147,11 @@ void Game::handle_input()
                     break;    
 
                     case SDLK_q:
-                        this->camera.set_scale( this->camera.get_scale() - CAM_SCALE );
+                        this->camera.set_scale( this->camera.get_scale() + CAM_SCALE );
                     break;
 
                     case SDLK_e:
-                        this->camera.set_scale( this->camera.get_scale() + CAM_SCALE );
+                        this->camera.set_scale( this->camera.get_scale() - CAM_SCALE );
                     break;                     
 
                 }
@@ -204,11 +193,31 @@ void Game::draw()
     }
     glUniform1i( tex_loc, 0 );
     
-    
-    for( auto& i : this->sprites )
-    {
-        i->draw();
-    }    
+    static Texture tex = Resource_Manager::get_texture("./Dev_Res/Images/happy-test-screen.png");
+
+    this->sprite_batch.start();
+    this->sprite_batch.draw( glm::vec4( 0.0f, 0.0f, 50.0f, 50.0f ), 
+                            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+                            tex.id,
+                            0.0f,
+                            {0xFF, 0xFF, 0xFF, 0xFF});
+
+    this->sprite_batch.draw( glm::vec4( 100.0f, 100.0f, -50.0f, -50.0f ), 
+                            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+                            tex.id,
+                            0.0f,
+                            {0xFF, 0xFF, 0xFF, 0xFF});
+
+    this->sprite_batch.draw( glm::vec4( 200.0f, 200.0f, 650.0f, 650.0f ), 
+                            glm::vec4( 0.0f, 0.0f, 1.0f, 1.0f ), 
+                            tex.id,
+                            0.0f,
+                            {0xFF, 0xFF, 0xFF, 0xFF});                            
+
+
+    this->sprite_batch.stop();
+
+    this->sprite_batch.render_batch();
 
     this->test_shader.stop();
 

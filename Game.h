@@ -6,10 +6,10 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 
-#include "Sprite.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Camera_2D.h"
+#include "Sprite_Batch.h"
 
 enum class GameState { PLAY , EXIT };
 
@@ -43,7 +43,7 @@ private:
     GameState state;
     Camera_2D camera;
 
-    std::vector<Sprite*> sprites;
+    Sprite_Batch sprite_batch;
     
     Shader test_shader;
 
