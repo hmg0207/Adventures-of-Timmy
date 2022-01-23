@@ -10,6 +10,7 @@
 #include "Texture.h"
 #include "Camera_2D.h"
 #include "Sprite_Batch.h"
+#include "Input_Manager.h"
 
 enum class GameState { PLAY , EXIT };
 
@@ -44,6 +45,8 @@ private:
     Camera_2D camera;
 
     Sprite_Batch sprite_batch;
+
+    Input_Manager input_manager;
     
     Shader test_shader;
 

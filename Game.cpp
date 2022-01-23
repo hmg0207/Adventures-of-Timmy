@@ -112,8 +112,8 @@ void Game::loop()
 void Game::handle_input()
 {
     SDL_Event ev;
-    static constexpr float CAM_SPEED = 10.0f;
-    static constexpr float CAM_SCALE = 0.1f;
+    static constexpr float CAM_SPEED = 2.0f;
+    static constexpr float CAM_SCALE = 0.01f;
 
     while ( SDL_PollEvent( &ev ) )
     {
@@ -128,37 +128,45 @@ void Game::handle_input()
                 break;
 
             case SDL_KEYDOWN:
-                switch(ev.key.keysym.sym)
-                {
-                    case SDLK_w:
-                        this->camera.set_position( this->camera.get_position() + glm::vec2( 0.0f, CAM_SPEED ) );
-                    break;
+                this->input_manager.key_pressed( ev.key.keysym.sym );
+                break;
 
-                    case SDLK_s:
-                        this->camera.set_position( this->camera.get_position() + glm::vec2( 0.0f, -CAM_SPEED ) );
-                    break;
-
-                    case SDLK_a:
-                        this->camera.set_position( this->camera.get_position() + glm::vec2( -CAM_SPEED, 0.0f) );
-                    break;
-
-                    case SDLK_d:
-                        this->camera.set_position( this->camera.get_position() + glm::vec2( CAM_SPEED, 0.0f ) );
-                    break;    
-
-                    case SDLK_q:
-                        this->camera.set_scale( this->camera.get_scale() + CAM_SCALE );
-                    break;
-
-                    case SDLK_e:
-                        this->camera.set_scale( this->camera.get_scale() - CAM_SCALE );
-                    break;                     
-
-                }
-                break;                
+            case SDL_KEYUP:
+                this->input_manager.key_released( ev.key.keysym.sym );
+                break;
+                  
         };
     }
-    
+
+    if ( this->input_manager.is_key_pressed( SDLK_w ) )
+    {
+        this->camera.set_position( this->camera.get_position() + glm::vec2( 0.0f, CAM_SPEED ) );
+    }
+
+    if ( this->input_manager.is_key_pressed( SDLK_s ) )
+    {
+        this->camera.set_position( this->camera.get_position() + glm::vec2( 0.0f, -CAM_SPEED ) );
+    }
+
+    if ( this->input_manager.is_key_pressed( SDLK_a ) )
+    {
+        this->camera.set_position( this->camera.get_position() + glm::vec2( -CAM_SPEED, 0.0f) );
+    }
+
+    if ( this->input_manager.is_key_pressed( SDLK_d ) )
+    {
+        this->camera.set_position( this->camera.get_position() + glm::vec2( CAM_SPEED, 0.0f ) );
+    }
+
+    if ( this->input_manager.is_key_pressed( SDLK_q ) )
+    {
+        this->camera.set_scale( this->camera.get_scale() + CAM_SCALE );
+    }
+
+    if ( this->input_manager.is_key_pressed( SDLK_e ) )
+    {
+        this->camera.set_scale( this->camera.get_scale() - CAM_SCALE );
+    }
 }
 
 
